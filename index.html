@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦶 郁达夫 · 足音雅笺</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #f3efe7;
+            font-family: 'Times New Roman', '宋体', 'Georgia', serif;
+            padding: 32px 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 680px;
+            width: 100%;
+            background: #fffcf8;
+            border-radius: 32px;
+            padding: 32px 28px 40px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+            border: 1px solid #ece3d8;
+        }
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: #6b4c3b;
+            text-align: center;
+            font-weight: 400;
+            border-bottom: 1px dashed #dccfbf;
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 24px;
+            padding-bottom: 10px;
+        }
+        .title-wrapper {
+            text-align: center;
+        }
+        .sub {
+            text-align: center;
+            color: #aa8e77;
+            font-size: 0.85rem;
+            margin-top: -12px;
+            margin-bottom: 32px;
+            font-style: italic;
+        }
+        .input-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 500;
+            color: #5d3a2b;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 48px;
+            border: 1px solid #e2d4c8;
+            background: #ffffff;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: #bf9b7a;
+            box-shadow: 0 0 0 2px #f5ede4;
+        }
+        button {
+            background: #8b6c52;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 1.15rem;
+            font-weight: 500;
+            border-radius: 60px;
+            margin: 16px 0 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-family: inherit;
+        }
+        button:hover {
+            background: #6e4f38;
+            transform: translateY(-1px);
+        }
+        .result-card {
+            background: #fef8f0;
+            border-radius: 24px;
+            padding: 24px;
+            margin: 16px 0 24px;
+            border-left: 5px solid #ccaa86;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #2c241e;
+            font-style: normal;
+            box-shadow: inset 0 0 0 1px #fff9f0, 0 2px 6px rgba(0,0,0,0.03);
+            min-height: 160px;
+        }
+        .footer {
+            font-size: 12px;
+            text-align: center;
+            color: #b6987a;
+            margin-top: 16px;
+            border-top: 1px solid #efe3d7;
+            padding-top: 20px;
+        }
+        .afdian-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f29f7a;
+            color: #2d241f;
+            padding: 8px 18px;
+            border-radius: 60px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin: 8px 4px;
+            transition: 0.2s;
+        }
+        .afdian-btn:hover {
+            background: #e6875c;
+            color: white;
+        }
+        .notice {
+            background: #f9f0e8;
+            border-radius: 20px;
+            padding: 14px 20px;
+            font-size: 0.8rem;
+            color: #987555;
+            margin: 20px 0 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title-wrapper">
+        <h1>🦶 足音雅笺</h1>
+    </div>
+    <div class="sub">仿郁达夫 · 足部诗学</div>
+
+    <div class="input-group">
+        <label>✨ 你的名字 / 昵称</label>
+        <input type="text" id="userName" placeholder="例如：秋子、程羽、小鹿" value="秋子">
+    </div>
+    <div class="input-group">
+        <label>📖 身份（不同身份，气味不同）</label>
+        <select id="userRole">
+            <option value="图书管理员">📚 图书管理员</option>
+            <option value="咖啡师">☕ 咖啡师</option>
+            <option value="诗人">✍️ 诗人</option>
+            <option value="舞者">💃 舞者</option>
+            <option value="教师">🍎 教师</option>
+            <option value="画师">🎨 画师</option>
+            <option value="旅人">🌿 旅人</option>
+        </select>
+    </div>
+
+    <button id="generateBtn">🌸 生成 · 足音笺 🌸</button>
+    <div class="result-card" id="result">🌸 输入名字、选择身份，点击生成。<br>AI 将为你写下一段郁达夫式的足部美笺。</div>
+
+    <div class="footer">
+        <a href="#" id="afdianLink" class="afdian-btn">❤️ 请作者喝一盏陈茶</a>
+        <div class="notice">
+            💌 每一次「足音笺」的生成都会消耗作者的 API 额度。<br>
+            🌙 若喜欢，不妨赞助一杯咖啡，让这场梦能久一点、再久一点。
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================================
+    // 🔧 【重要】请替换成你的 Cloudflare Worker 地址
+    const API_URL = 'https://feet-666.1683512434.workers.dev';
+    // ==========================================================
+
+    const generateBtn = document.getElementById('generateBtn');
+    const resultDiv = document.getElementById('result');
+
+    generateBtn.onclick = async () => {
+        const name = document.getElementById('userName').value.trim();
+        const role = document.getElementById('userRole').value;
+
+        if (!name) {
+            resultDiv.innerText = '🌙 请先留下一个名字，才能生出这场风月。';
+            return;
+        }
+
+        resultDiv.innerText = '✍️ AI 正蘸墨书写... 片刻便成。';
+        resultDiv.style.opacity = '0.7';
+        generateBtn.disabled = true;
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, role })
+            });
+
+            const data = await response.json();
+            if (response.ok && data.result) {
+                resultDiv.innerText = data.result;
+            } else if (response.status === 429) {
+                resultDiv.innerText = '🍃 请求太频繁了，请稍等一分钟再继续赏玩。';
+            } else {
+                throw new Error(data.error || '生成失败，可能是网络迷途。');
+            }
+        } catch (err) {
+            console.error(err);
+            resultDiv.innerText = '❄️ 服务暂时走神，请稍后重试。若有心，可回来再会。';
+        } finally {
+            resultDiv.style.opacity = '1';
+            generateBtn.disabled = false;
+        }
+    };
+
+    // 爱发电赞助链接（等你注册完后再替换）
+    document.getElementById('afdianLink').onclick = (e) => {
+        e.preventDefault();
+        alert('❤️ 请先注册爱发电平台，创建好赞助页面后，把链接贴进代码里就行～\n地址：https://afdian.com');
+    };
+</script>
+</body>
+</html>
