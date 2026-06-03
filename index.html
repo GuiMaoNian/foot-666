@@ -2,14 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦶 郁达夫 · 足音雅笺</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>🦶 狱卒文学 · 足音笺</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background: #f3efe7;
             font-family: 'Times New Roman', '宋体', 'Georgia', serif;
@@ -25,7 +21,7 @@
             background: #fffcf8;
             border-radius: 32px;
             padding: 32px 28px 40px;
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.08);
             border: 1px solid #ece3d8;
         }
         h1 {
@@ -40,9 +36,7 @@
             margin: 0 auto 24px;
             padding-bottom: 10px;
         }
-        .title-wrapper {
-            text-align: center;
-        }
+        .title-wrapper { text-align: center; }
         .sub {
             text-align: center;
             color: #aa8e77;
@@ -61,10 +55,10 @@
             margin-bottom: 6px;
             font-size: 0.9rem;
         }
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px 16px;
-            border-radius: 48px;
+            border-radius: 24px;
             border: 1px solid #e2d4c8;
             background: #ffffff;
             font-size: 1rem;
@@ -72,9 +66,34 @@
             outline: none;
             transition: 0.2s;
         }
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: #bf9b7a;
             box-shadow: 0 0 0 2px #f5ede4;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            border-radius: 20px;
+        }
+        .char-counter {
+            text-align: right;
+            font-size: 0.75rem;
+            color: #b6987a;
+            margin-top: 4px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            padding: 8px 0;
+        }
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
         }
         button {
             background: #8b6c52;
@@ -91,9 +110,14 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             font-family: inherit;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background: #6e4f38;
             transform: translateY(-1px);
+        }
+        button:disabled {
+            background: #cbbaa8;
+            cursor: not-allowed;
+            transform: none;
         }
         .result-card {
             background: #fef8f0;
@@ -107,7 +131,25 @@
             font-style: normal;
             box-shadow: inset 0 0 0 1px #fff9f0, 0 2px 6px rgba(0,0,0,0.03);
             min-height: 160px;
+            transition: opacity 0.2s;
         }
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #b6987a;
+        }
+        .loading::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            border: 2px solid #e2d4c8;
+            border-top-color: #8b6c52;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         .footer {
             font-size: 12px;
             text-align: center;
@@ -138,99 +180,136 @@
             background: #f9f0e8;
             border-radius: 20px;
             padding: 14px 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #987555;
             margin: 20px 0 0;
             text-align: center;
+        }
+        .error {
+            color: #b85c3a;
+            border-left-color: #b85c3a;
+            background: #fef2ef;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="title-wrapper">
-        <h1>🦶 足音雅笺</h1>
+        <h1>🦶 狱卒文学 · 足音笺</h1>
     </div>
-    <div class="sub">仿郁达夫 · 足部诗学</div>
+    <div class="sub">以目礼足 · 以鼻观心</div>
 
     <div class="input-group">
-        <label>✨ 你的名字 / 昵称</label>
-        <input type="text" id="userName" placeholder="例如：秋子、程羽、小鹿" value="秋子">
+        <label>✨ 名字（来自作品或自拟，≤10字）</label>
+        <input type="text" id="userName" maxlength="10" placeholder="例：绫波丽 / 林雪 / 夏目贵志" value="秋子">
+        <div class="char-counter"><span id="nameCounter">0</span>/10</div>
     </div>
+
     <div class="input-group">
-        <label>📖 身份（不同身份，气味不同）</label>
-        <select id="userRole">
-            <option value="图书管理员">📚 图书管理员</option>
-            <option value="咖啡师">☕ 咖啡师</option>
-            <option value="诗人">✍️ 诗人</option>
-            <option value="舞者">💃 舞者</option>
-            <option value="教师">🍎 教师</option>
-            <option value="画师">🎨 画师</option>
-            <option value="旅人">🌿 旅人</option>
-        </select>
+        <label>⚥ 性别</label>
+        <div class="radio-group">
+            <label><input type="radio" name="gender" value="女" checked> 女</label>
+            <label><input type="radio" name="gender" value="男"> 男</label>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label>📝 附加信息（生活习惯 / 来源作品 / 年龄等，≤50字）</label>
+        <textarea id="extraInfo" maxlength="50" rows="2" placeholder="例如：来自《EVA》，沉默寡言，常穿黑色长袜 / 爱喝龙井，喜欢赤脚踩木地板"></textarea>
+        <div class="char-counter"><span id="extraCounter">0</span>/50</div>
     </div>
 
     <button id="generateBtn">🌸 生成 · 足音笺 🌸</button>
-    <div class="result-card" id="result">🌸 输入名字、选择身份，点击生成。<br>AI 将为你写下一段郁达夫式的足部美笺。</div>
+
+    <div class="result-card" id="result">✨ 输入名字、性别和附加信息，点击生成。<br>AI 将以第二人称写下一段足部美文。</div>
 
     <div class="footer">
-        <a href="#" id="afdianLink" class="afdian-btn">❤️ 请作者喝一盏陈茶</a>
+        <a href="https://afdian.com/a/你的ID" target="_blank" class="afdian-btn">❤️ 请作者喝一盏陈茶</a>
         <div class="notice">
-            💌 每一次「足音笺」的生成都会消耗作者的 API 额度。<br>
-            🌙 若喜欢，不妨赞助一杯咖啡，让这场梦能久一点、再久一点。
+            ⚠️ 所有内容由 AI 模型自动生成，纯属虚构娱乐，不代表任何事实观点。<br>
+            💧 每次生成消耗 API 额度，若喜欢可赞助支持。
         </div>
     </div>
 </div>
 
 <script>
-    // ==========================================================
-    // 🔧 【重要】请替换成你的 Cloudflare Worker 地址
+    // ========== 关键配置：请勿修改此 URL ==========
     const API_URL = 'https://api.guimaonian.online';
-    // ==========================================================
+    // ============================================
 
     const generateBtn = document.getElementById('generateBtn');
     const resultDiv = document.getElementById('result');
+    const userNameInput = document.getElementById('userName');
+    const extraTextarea = document.getElementById('extraInfo');
+    const nameCounter = document.getElementById('nameCounter');
+    const extraCounter = document.getElementById('extraCounter');
+    const genderRadios = document.querySelectorAll('input[name="gender"]');
+
+    // 实时字数统计
+    function updateCounters() {
+        nameCounter.textContent = userNameInput.value.length;
+        extraCounter.textContent = extraTextarea.value.length;
+    }
+    userNameInput.addEventListener('input', updateCounters);
+    extraTextarea.addEventListener('input', updateCounters);
+    updateCounters();
+
+    // 获取选中的性别
+    function getSelectedGender() {
+        for (let radio of genderRadios) {
+            if (radio.checked) return radio.value;
+        }
+        return '女';
+    }
 
     generateBtn.onclick = async () => {
-        const name = document.getElementById('userName').value.trim();
-        const role = document.getElementById('userRole').value;
+        const name = userNameInput.value.trim();
+        const gender = getSelectedGender();
+        const extra = extraTextarea.value.trim();
 
+        // 前端校验
         if (!name) {
-            resultDiv.innerText = '🌙 请先留下一个名字，才能生出这场风月。';
+            resultDiv.innerText = '🌙 请先留下一个名字（至少1字）。';
+            resultDiv.classList.add('error');
+            return;
+        }
+        if (name.length > 10) {
+            resultDiv.innerText = '❌ 名字不能超过10个字。';
+            resultDiv.classList.add('error');
+            return;
+        }
+        if (extra.length > 50) {
+            resultDiv.innerText = '❌ 附加信息不能超过50字。';
+            resultDiv.classList.add('error');
             return;
         }
 
-        resultDiv.innerText = '✍️ AI 正蘸墨书写... 片刻便成。';
-        resultDiv.style.opacity = '0.7';
+        // 显示加载动画
+        resultDiv.innerHTML = '<div class="loading">AI 正蘸墨书写，片刻便成</div>';
+        resultDiv.classList.remove('error');
         generateBtn.disabled = true;
 
         try {
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, role })
+                body: JSON.stringify({ name, gender, extra })
             });
-
             const data = await response.json();
             if (response.ok && data.result) {
-                resultDiv.innerText = data.result;
+                resultDiv.innerHTML = data.result.replace(/\n/g, '<br>');
             } else if (response.status === 429) {
-                resultDiv.innerText = '🍃 请求太频繁了，请稍等一分钟再继续赏玩。';
+                resultDiv.innerHTML = '🍃 请求太频繁了，请稍等一分钟再试。';
             } else {
-                throw new Error(data.error || '生成失败，可能是网络迷途。');
+                throw new Error(data.error || '生成失败，请检查网络或稍后重试。');
             }
         } catch (err) {
             console.error(err);
-            resultDiv.innerText = '❄️ 服务暂时走神，请稍后重试。若有心，可回来再会。';
+            resultDiv.innerHTML = '❄️ 服务暂时走神，请稍后重试。';
+            resultDiv.classList.add('error');
         } finally {
-            resultDiv.style.opacity = '1';
             generateBtn.disabled = false;
         }
-    };
-
-    // 爱发电赞助链接（等你注册完后再替换）
-    document.getElementById('afdianLink').onclick = (e) => {
-        e.preventDefault();
-        alert('❤️ 请先注册爱发电平台，创建好赞助页面后，把链接贴进代码里就行～\n地址：https://afdian.com');
     };
 </script>
 </body>
