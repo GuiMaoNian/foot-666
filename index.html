@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🦶 狱卒文学 · 足音笺</title>
+    <title>🦶 狱卒文学 · 符合粥礼</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -23,6 +23,7 @@
             padding: 32px 28px 40px;
             box-shadow: 0 8px 28px rgba(0,0,0,0.08);
             border: 1px solid #ece3d8;
+            position: relative;
         }
         h1 {
             font-size: 1.8rem;
@@ -158,12 +159,12 @@
             border-top: 1px solid #efe3d7;
             padding-top: 20px;
         }
-        .afdian-btn {
+        .bili-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #f29f7a;
-            color: #2d241f;
+            background: #00a1d6;
+            color: white;
             padding: 8px 18px;
             border-radius: 60px;
             text-decoration: none;
@@ -172,9 +173,9 @@
             margin: 8px 4px;
             transition: 0.2s;
         }
-        .afdian-btn:hover {
-            background: #e6875c;
-            color: white;
+        .bili-btn:hover {
+            background: #0088b0;
+            transform: translateY(-1px);
         }
         .notice {
             background: #f9f0e8;
@@ -184,6 +185,22 @@
             color: #987555;
             margin: 20px 0 0;
             text-align: center;
+            line-height: 1.5;
+        }
+        .notice strong {
+            color: #b85c3a;
+            font-weight: bold;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 0.6rem;
+            color: #dccfbf;
+            opacity: 0.5;
+            pointer-events: none;
+            font-family: monospace;
+            white-space: nowrap;
         }
         .error {
             color: #b85c3a;
@@ -195,9 +212,9 @@
 <body>
 <div class="container">
     <div class="title-wrapper">
-        <h1>🦶 狱卒文学 · 足音笺</h1>
+        <h1>🦶 狱卒文学·符合粥礼</h1>
     </div>
-    <div class="sub">以目礼足 · 以鼻观心</div>
+    <div class="sub">输入相应信息自动生成狱卒文学</div>
 
     <div class="input-group">
         <label>✨ 名字（来自作品或自拟，≤10字）</label>
@@ -219,17 +236,19 @@
         <div class="char-counter"><span id="extraCounter">0</span>/50</div>
     </div>
 
-    <button id="generateBtn">🌸 生成 · 狱卒文学 🌸</button>
+    <button id="generateBtn">生成·狱卒文学</button>
 
-    <div class="result-card" id="result">✨ 输入名字、性别和附加信息，点击生成。<br>AI 将写下一份狱卒文学。</div>
+    <div class="result-card" id="result">✨ 输入名字、性别和附加信息，点击生成。<br>将自动生成一段足部美文。</div>
 
     <div class="footer">
-        <a href="https://afdian.com/a/你的ID" target="_blank" class="afdian-btn">❤️ 请作者喝一盏陈茶</a>
+        <a href="https://space.bilibili.com/362455056?spm_id_from=333.1007.0.0" target="_blank" class="bili-btn">📺 来作者B站主页点点赞</a>
         <div class="notice">
-            ⚠️ 所有内容由 AI 模型自动生成，纯属虚构娱乐，不代表任何事实观点。<br>
-            💧 每次生成消耗 API 额度，若喜欢可赞助支持。
+            <strong>⚠️ 每次生成消耗API额度，由作者自费承担。若token耗尽，网站将停止使用。</strong><br>
+            所有内容由AI模型自动生成，纯属虚构娱乐，不代表任何事实观点。<br>
+            欢迎私信和up聊天！也许我们可以建个群？🤔
         </div>
     </div>
+    <div class="watermark">由青稞鱼制作，感谢好喜欢你呀的技术支持</div>
 </div>
 
 <script>
@@ -285,7 +304,7 @@
         }
 
         // 显示加载动画
-        resultDiv.innerHTML = '<div class="loading">AI 正蘸墨书写，片刻便成</div>';
+        resultDiv.innerHTML = '<div class="loading">正在蘸墨书写，片刻便成</div>';
         resultDiv.classList.remove('error');
         generateBtn.disabled = true;
 
